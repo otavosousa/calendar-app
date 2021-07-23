@@ -1,11 +1,18 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
+import { useRoute } from '@react-navigation/native'
+import styles from './styles'
 
 function Day(){
 
+  // HOOKS
+  const route = useRoute()
+
     return(
 
-        <View/>
+        <View style={styles.container}>
+          <Text>{route.params.day}</Text>
+        </View>
     )
 }
 
