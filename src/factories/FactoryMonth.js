@@ -4,15 +4,14 @@ function FactoryMonth(){
 
     function getName(){
 
-        return new Date().toLocaleString('default', { month: 'long' })
+        const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio","Junho","Julho", "Agosto", "Setembro", "Outubro", "Novembro","Dezembro"];
+        const date = new Date()
+        const monthName = monthNames[date.getMonth()]
+
+        return monthName
     }
 
-    function getDaysName(){
-
-        return ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
-    }
-
-    function getDaysNumber(){
+    function getDays(){
         
         const qtdDaysMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
         const firstDayWeek = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDay()
@@ -48,8 +47,7 @@ function FactoryMonth(){
         return daysMonth
     }
 
-    month.getDaysName = getDaysName
-    month.getDaysNumber = getDaysNumber
+    month.getDays = getDays
     month.getName = getName
 
     return month

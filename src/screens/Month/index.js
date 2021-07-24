@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import styles from './styles'
 import FactoryMonth  from '../../factories/FactoryMonth'
+import FactoryWeek  from '../../factories/FactoryWeek'
 import { Table, Row } from 'react-native-table-component';
 import { useNavigation } from '@react-navigation/native'
 
@@ -12,6 +13,7 @@ function Month(){
 
     // FACTORY
     const factoryMonth = new FactoryMonth()
+    const factoryWeek = new FactoryWeek()
 
     // HANDLES
 
@@ -34,18 +36,18 @@ function Month(){
     return(
         
         <View style={styles.container}>
-            <View>
+            <View style={styles.headers}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>{factoryMonth.getName()}</Text>
                 </View>
-                <View>
-                    <Table>
-                        <Row data={factoryMonth.getDaysName()} style={styles.calendarHead} textStyle={styles.calendarHeadText}/>
-                        {factoryMonth.getDaysNumber().map((months, index) => (
-                            <Row data={months.map(month => month != "" ? handleSelectDay(month) : month )} key={String(index)}/>
-                        ))}
-                    </Table>
-                </View>
+            </View>
+            <View style={styles.main}>
+                <Table>
+                    <Row data={factoryWeek.getNames().map(name => name[0])} style={styles.calendarHead} textStyle={styles.calendarHeadText}/>
+                    {factoryMonth.getDays().map((months, index) => (
+                        <Row data={months.map(month => month != "" ? handleSelectDay(month) : month )} key={String(index)}/>
+                    ))}
+                </Table>
             </View>
         </View>
     )

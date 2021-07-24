@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         color: '#535353',
         fontWeight: 'bold',
         fontSize: 30,
-        textTransform: 'capitalize',
+        textAlign: 'right'
     },
 
     calendarHead: {
