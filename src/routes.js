@@ -14,7 +14,7 @@ function Routes() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Month" component={Month} />
           <Stack.Screen name="Day" component={Day} />
-          <Stack.Screen name="Reminder" component={Reminder} />
+          <Stack.Screen name="Reminder" component={Reminder} options={{gestureEnabled: false, animationEnabled: false}}/>
         </Stack.Navigator>
       </NavigationContainer>
     );
