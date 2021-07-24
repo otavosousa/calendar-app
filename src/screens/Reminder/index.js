@@ -1,16 +1,35 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import styles from './styles'
 import { Feather } from '@expo/vector-icons'; 
+import { useDispatch } from 'react-redux'
 
 function Reminder(){
 
+    // HOOKS
+    const route = useRoute()
+    const dispatch = useDispatch()
+
     // STATES
-    const [title, setTitle] = useState()
+    const [reminder, setReminder] = useState({ 
+        id: Math.random().toString(36).substring(2),
+        title: '', 
+        start: '', 
+        finish: '', 
+        local: '', 
+        color : '',
+        day: route.params.day
+    })
 
     // HOOKS
     const navigation = useNavigation()
+
+    const handleSave = async () => {
+
+        dispatch({type: 'ADD_REMINDER', data: reminder})
+        navigation.goBack()
+    }
 
     return(
         <View style={styles.container}>
@@ -21,7 +40,7 @@ function Reminder(){
               <View style={styles.titleContainer}>
                   <Text style={styles.titleText}>{`Novo evento`}</Text>
               </View>
-              <TouchableOpacity style={styles.confirmItem} onPress={() => navigation.goBack()}>
+              <TouchableOpacity style={styles.confirmItem} onPress={() => handleSave()}>
                 <Text style={styles.confirmItemText}>Salvar</Text>
               </TouchableOpacity>
             </View>
@@ -30,10 +49,10 @@ function Reminder(){
                     <TextInput
                         style={styles.inputText}
                         enablesReturnKeyAutomatically={true}
-                        onChangeText={text => setTitle(text)}
+                        onChangeText={text => setReminder({...reminder, title: text})}
                         placeholder={'Título'}
                         placeholderTextColor="#BDBDBD"
-                        value={title}
+                        value={reminder.title}
                         maxLength = {30}
                     />
                 </View>
