@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ModalTime from '../../components/ModalTime';
 import ModalColor from '../../components/ModalColor';
 import ModalLocal from '../../components/ModalLocal';
+import FactoryReminder from '../../factories/FactoryReminder';
 
 function Reminder(){
 
@@ -14,6 +15,7 @@ function Reminder(){
     const route = useRoute()
     const dispatch = useDispatch()
     const navigation = useNavigation()
+    const factoryReminder = new FactoryReminder()
 
     // STATES
     const reminder = useSelector(state => state.reminder.data)
@@ -27,12 +29,15 @@ function Reminder(){
     // HANDLES
     const handleSave = async () => {
 
-        dispatch({type: 'ADD_REMINDER', data: {
+        const data = {
             ...reminder, 
             id: Math.random().toString(36).substring(2),
             title,
             day: route.params.day
-        }})
+        }
+
+        const setData = await factoryReminder.set(data)
+        console.log(setData)
         
         handleExit()
     }
