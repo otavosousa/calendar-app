@@ -37,8 +37,6 @@ function Reminder(){
         }
 
         const setData = await factoryReminder.set(data)
-        console.log(setData)
-        
         handleExit()
     }
 
