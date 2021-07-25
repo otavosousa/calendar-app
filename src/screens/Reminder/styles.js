@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
 
         marginTop: 20,
         flexDirection: 'row',
+        alignItems: 'center'
     },
     sectionText: {
         fontSize: 20,

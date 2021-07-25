@@ -6,6 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux'
 import ModalTime from '../../components/ModalTime';
 import ModalColor from '../../components/ModalColor';
+import ModalLocal from '../../components/ModalLocal';
 
 function Reminder(){
 
@@ -20,6 +21,7 @@ function Reminder(){
     const [timeIsStart, setTimeIsStart] = useState(false)
     const [modalTimeVisible, setModalTimeVisible] = useState(false)
     const [modalColorVisible, setModalColorVisible] = useState(false)
+    const [modalLocalVisible, setModalLocalVisible] = useState(false)
     
 
     // HANDLES
@@ -46,8 +48,9 @@ function Reminder(){
         navigation.goBack()
     }
 
-    return(
-        <View style={styles.container}>
+    // COMPONENTS
+    const Modals = () => (
+        <>
             <ModalTime 
                 timeIsStart={timeIsStart}
                 modalTimeVisible={modalTimeVisible}
@@ -58,6 +61,19 @@ function Reminder(){
                 setModalColorVisible={setModalColorVisible}
                 modalColorVisible={modalColorVisible}
             />
+            <ModalLocal
+                setModalLocalVisible={setModalLocalVisible}
+                modalLocalVisible={modalLocalVisible}
+            />
+        </>
+    )
+
+
+
+    return(
+        <View style={styles.container}>
+
+            <Modals />
 
             <View style={styles.header}>
               <TouchableOpacity style={styles.confirmItem} onPress={handleExit}>
@@ -82,39 +98,40 @@ function Reminder(){
                         maxLength = {30}
                     />
                 </View>
-                <View style={styles.section}>
+                <View style={[styles.section, {alignItems: 'flex-start'}]}>
                     <View style={styles.sectionText}>
                         <Feather name="clock" size={24} color="#535353" />
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <View>
-                            <Text style={styles.sectionText}>Começa em:</Text>
-                            <Text style={styles.sectionText}>Termina em:</Text>
-                        </View>
-                        <View>
-                            <TouchableOpacity onPress={() => handleModalTime(true)}>
-                                <Text style={styles.sectionText}>{reminder.start}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleModalTime(false)}>
-                                <Text style={styles.sectionText}>{reminder.finish}</Text>
-                            </TouchableOpacity>
-                        </View>
+                    <View>
+                        <TouchableOpacity onPress={() => handleModalTime(true)}>
+                            <Text style={styles.sectionText}>Começa em: {reminder.start}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleModalTime(false)}>
+                            <Text style={styles.sectionText}>Termina em: {reminder.finish}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-                <View style={[styles.section, {alignItems: 'center'}]}>
+                <TouchableOpacity style={styles.section} onPress={() => setModalLocalVisible(!modalLocalVisible)}>
                     <View style={styles.sectionText}>
                         <Feather name="map-pin" size={24} color="#535353" />
                     </View>
                     <View>
-                        <Text style={styles.sectionText}>Local</Text>
+                        <Text style={styles.sectionText}>Local: {reminder.local}</Text>
+
+                        <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10}}>
+                            <Feather name="umbrella" size={12} color="black" />
+                            <Text style={{paddingLeft: 5}}>Tempo: {reminder.weather}</Text>
+                        </View>
                     </View>
-                </View>
-                <View style={[styles.section, { alignItems: 'center'}]}>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.section}
+                    onPress={() => setModalColorVisible(!modalColorVisible)}>
                     <View style={[styles.sectionDiagram, {backgroundColor: reminder.color}]}></View>
-                    <TouchableOpacity onPress={() => setModalColorVisible(!modalColorVisible)}>
+                    <View>
                         <Text style={styles.sectionText}>Cor</Text>
-                    </TouchableOpacity>
-                </View>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     )

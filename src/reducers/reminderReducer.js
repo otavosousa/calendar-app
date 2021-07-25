@@ -6,7 +6,8 @@ const INITIAL_STATE = {
         finish: '01:00', 
         local: '', 
         color : '#3498DB',
-        day: ''
+        day: '',
+        weather: ''
     }
 }
 
@@ -24,7 +25,8 @@ function reminder(state=INITIAL_STATE, action) {
                 finish: '01:00', 
                 local: '', 
                 color : '#3498DB',
-                day: ''
+                day: '',
+                weather: ''
             }}
         default:
             return state
