@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import styles from './styles'
 import FactoryMonth  from '../../factories/FactoryMonth'
 import FactoryWeek  from '../../factories/FactoryWeek'
+import FactoryReminder from '../../factories/FactoryReminder'
 import { Table, Row } from 'react-native-table-component';
 import { useNavigation } from '@react-navigation/native'
 
@@ -11,20 +12,32 @@ function Month(){
     // HOOKS
     const navigation = useNavigation()
 
-    // FACTORY
+    // FACTORIES
     const factoryMonth = new FactoryMonth()
     const factoryWeek = new FactoryWeek()
+    const factoryReminder = new FactoryReminder()
 
     // HANDLES
 
     const handleToPageDay = (value) => {
-
         navigation.navigate('Day', {
             day: value
         })
-
     }
 
+    const handleGetReminders = async () => {
+
+        const datas = await factoryReminder.get()
+        
+        datas.forEach(data => factoryReminder.actionAdd(data))
+    }
+
+    useEffect(() => {
+
+        handleGetReminders()
+    },[])
+
+    // COMPONENTS
     const handleSelectDay = (value) => (
         <TouchableOpacity onPress={() => handleToPageDay(value)}>
           <View >
