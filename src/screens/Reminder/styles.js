@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
         fontSize: 30,
     },
     confirmItemText: {
-        fontSize: 20
+        fontSize: 20,
+        fontWeight: '600'
     },
     main: {
 
@@ -53,9 +54,14 @@ const styles = StyleSheet.create({
     sectionDiagram: {
         width: 24,
         height: 24,
-        backgroundColor: 'blue',
+        backgroundColor: '#3498DB',
         margin: 10,
         borderRadius: 5
+    },
+    sectionTimer: {
+        flexDirection: 'row',
+        display: 'flex',
+        alignItems: 'center'
     }
 })
 

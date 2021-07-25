@@ -3,38 +3,64 @@ import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import styles from './styles'
 import { Feather } from '@expo/vector-icons'; 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import ModalTime from '../../components/ModalTime';
+import ModalColor from '../../components/ModalColor';
 
 function Reminder(){
 
     // HOOKS
     const route = useRoute()
     const dispatch = useDispatch()
-
-    // STATES
-    const [reminder, setReminder] = useState({ 
-        id: Math.random().toString(36).substring(2),
-        title: '', 
-        start: '', 
-        finish: '', 
-        local: '', 
-        color : '',
-        day: route.params.day
-    })
-
-    // HOOKS
     const navigation = useNavigation()
 
+    // STATES
+    const reminder = useSelector(state => state.reminder.data)
+    const [title, setTitle] = useState('')
+    const [timeIsStart, setTimeIsStart] = useState(false)
+    const [modalTimeVisible, setModalTimeVisible] = useState(false)
+    const [modalColorVisible, setModalColorVisible] = useState(false)
+    
+
+    // HANDLES
     const handleSave = async () => {
 
-        dispatch({type: 'ADD_REMINDER', data: reminder})
+        dispatch({type: 'ADD_REMINDER', data: {
+            ...reminder, 
+            id: Math.random().toString(36).substring(2),
+            title,
+            day: route.params.day
+        }})
+        
+        handleExit()
+    }
+
+    const handleModalTime = (value) => {
+
+        setTimeIsStart(value)
+        setModalTimeVisible(!modalTimeVisible)
+    }
+
+    const handleExit = () => {
+        dispatch({type: 'RESET_REMINDER'})
         navigation.goBack()
     }
 
     return(
         <View style={styles.container}>
+            <ModalTime 
+                timeIsStart={timeIsStart}
+                modalTimeVisible={modalTimeVisible}
+                setModalTimeVisible={setModalTimeVisible}
+            />
+
+            <ModalColor
+                setModalColorVisible={setModalColorVisible}
+                modalColorVisible={modalColorVisible}
+            />
+
             <View style={styles.header}>
-              <TouchableOpacity style={styles.confirmItem} onPress={() => navigation.goBack()}>
+              <TouchableOpacity style={styles.confirmItem} onPress={handleExit}>
                 <Text style={styles.confirmItemText}>Cancelar</Text>
               </TouchableOpacity>
               <View style={styles.titleContainer}>
@@ -49,10 +75,10 @@ function Reminder(){
                     <TextInput
                         style={styles.inputText}
                         enablesReturnKeyAutomatically={true}
-                        onChangeText={text => setReminder({...reminder, title: text})}
+                        onChangeText={text => setTitle(text)}
                         placeholder={'Título'}
                         placeholderTextColor="#BDBDBD"
-                        value={reminder.title}
+                        value={title}
                         maxLength = {30}
                     />
                 </View>
@@ -62,12 +88,16 @@ function Reminder(){
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <View>
-                            <Text style={styles.sectionText}>Começa em</Text>
-                            <Text style={styles.sectionText}>Termina em</Text>
+                            <Text style={styles.sectionText}>Começa em:</Text>
+                            <Text style={styles.sectionText}>Termina em:</Text>
                         </View>
                         <View>
-                            <Text style={styles.sectionText}>22:05</Text>
-                            <Text style={styles.sectionText}>23:05</Text>
+                            <TouchableOpacity onPress={() => handleModalTime(true)}>
+                                <Text style={styles.sectionText}>{reminder.start}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleModalTime(false)}>
+                                <Text style={styles.sectionText}>{reminder.finish}</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -80,12 +110,10 @@ function Reminder(){
                     </View>
                 </View>
                 <View style={[styles.section, { alignItems: 'center'}]}>
-                    <View style={styles.sectionDiagram}>
-
-                    </View>
-                    <View>
+                    <View style={[styles.sectionDiagram, {backgroundColor: reminder.color}]}></View>
+                    <TouchableOpacity onPress={() => setModalColorVisible(!modalColorVisible)}>
                         <Text style={styles.sectionText}>Cor</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
