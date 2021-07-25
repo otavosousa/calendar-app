@@ -1,8 +1,10 @@
 import { createStore, combineReducers } from 'redux'
-import remindersReducer from '../reducers/remindersReducer'
+import reminders from '../reducers/remindersReducer'
+import reminder from '../reducers/reminderReducer'
 
 const reducers = combineReducers({
-    reminders: remindersReducer,
+    reminders,
+    reminder,
 })
 
 const store = createStore(reducers)
