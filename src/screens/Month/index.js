@@ -6,6 +6,7 @@ import FactoryWeek  from '../../factories/FactoryWeek'
 import FactoryReminder from '../../factories/FactoryReminder'
 import { Table, Row } from 'react-native-table-component';
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
 function Month(){
     
@@ -16,6 +17,7 @@ function Month(){
     const factoryMonth = new FactoryMonth()
     const factoryWeek = new FactoryWeek()
     const factoryReminder = new FactoryReminder()
+    const reminders = useSelector(state => state.reminders.data)
 
     // HANDLES
 
@@ -38,13 +40,23 @@ function Month(){
     },[])
 
     // COMPONENTS
-    const handleSelectDay = (value) => (
-        <TouchableOpacity onPress={() => handleToPageDay(value)}>
-          <View >
-            <Text style={styles.calendarBodyText} >{value}</Text>
-          </View>
-        </TouchableOpacity>
-      );
+    const handleSelectDay = (value) => {
+
+        const isReminder = reminders.some(reminder => reminder.day === value)
+
+        return (
+
+            <TouchableOpacity onPress={() => handleToPageDay(value)} style={styles.calendarItem}>
+                <View>
+                    <Text style={styles.calendarBodyText} >{value}</Text>
+                </View>
+                <View style={styles.calendarItemSpan}>
+                    {isReminder && <View style={styles.span}/>}
+                </View>
+            </TouchableOpacity>
+        )
+        
+    };
 
     return(
         

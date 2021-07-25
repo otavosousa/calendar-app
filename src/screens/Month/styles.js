@@ -42,6 +42,21 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 40
     },
+    calendarItem: {
+
+        position: 'relative'
+    },
+    calendarItemSpan: {
+        position: 'absolute',
+        top: '50%',
+        left: '42.5%'
+    },
+    span: {
+        width: 10,
+        height: 10,
+        backgroundColor: 'gray',
+        borderRadius: 50
+    }
 })
 
 export default styles
