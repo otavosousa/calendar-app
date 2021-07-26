@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import styles from './styles'
 import { Feather } from '@expo/vector-icons'; 
@@ -19,6 +19,8 @@ function Reminder(){
 
     // STATES
     const reminder = useSelector(state => state.reminder.data)
+    const reminders = useSelector(state => state.reminders.data.filter(reminder => reminder.day === route.params.day))
+    const [isEdit, setIsEdit] = useState(false)
     const [title, setTitle] = useState('')
     const [timeIsStart, setTimeIsStart] = useState(false)
     const [modalTimeVisible, setModalTimeVisible] = useState(false)
@@ -29,15 +31,73 @@ function Reminder(){
     // HANDLES
     const handleSave = async () => {
 
-        const data = {
-            ...reminder, 
-            id: Math.random().toString(36).substring(2),
-            title,
-            day: route.params.day
+        const verify = handleVerification()
+
+        if(verify) {
+
+            const data = {
+                ...reminder, 
+                id: isEdit ? reminder.id : Math.random().toString(36).substring(2),
+                title,
+                day: route.params.day
+            }
+    
+            if(isEdit) await factoryReminder.edit(data)
+            else await factoryReminder.set(data)
+    
+            handleExit()
         }
 
-        const setData = await factoryReminder.set(data)
+    }
+
+    const handleDelete = async () => {
+
+        await factoryReminder.del(reminder)
         handleExit()
+    }
+
+    const handleAlerDelete = () => {
+
+        Alert.alert(
+            'Deletar evento', 
+            'Você tem certeza que quer deletar o evento?',
+            [
+                {
+                    text: "Cancelar"
+                },
+                { text: "Deletar", onPress: handleDelete }
+            ])
+    }
+
+    const handleAlertVerify = (msg) => {
+
+        Alert.alert(
+            'Ops, algo deu errado!',
+            msg
+        )
+    }
+
+    const handleVerification = () => {
+        let verification = false
+
+        function getMinutes(num){
+            return (Number(num.slice(0,2))*60) + Number(num.slice(3,5))
+        }
+
+        if(title.length === 0) {
+            return handleAlertVerify('Você deve preencher o campo de título')
+        }
+
+        const start = getMinutes(reminder.start)
+        const finish = getMinutes(reminder.finish)
+        const calc = finish - start
+
+        if(calc <= 0) {
+            return handleAlertVerify('Altere o campo de horário')
+        }
+
+        verification = true
+        return verification
     }
 
     const handleModalTime = (value) => {
@@ -47,9 +107,21 @@ function Reminder(){
     }
 
     const handleExit = () => {
-        dispatch({type: 'RESET_REMINDER'})
+        factoryReminder.actionReset()
         navigation.goBack()
     }
+
+    useEffect(() => {
+
+        if(route.params.reminder) {
+
+            const reminderEdit = reminders.filter(item => item.id === route.params.reminder.id)[0]
+    
+            factoryReminder.actionCache(reminderEdit)
+            setTitle(reminderEdit.title)
+            setIsEdit(true)
+        }
+    }, [])
 
     // COMPONENTS
     const Modals = () => (
@@ -86,7 +158,7 @@ function Reminder(){
                   <Text style={styles.titleText}>{`Novo evento`}</Text>
               </View>
               <TouchableOpacity style={styles.confirmItem} onPress={() => handleSave()}>
-                <Text style={styles.confirmItemText}>Salvar</Text>
+                <Text style={styles.confirmItemText}>{isEdit ? 'Editar' : 'Salvar'}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.main}>
@@ -135,6 +207,12 @@ function Reminder(){
                         <Text style={styles.sectionText}>Cor</Text>
                     </View>
                 </TouchableOpacity>
+                {isEdit &&
+                    <TouchableOpacity style={styles.deleteBtn} onPress={handleAlerDelete}>
+                        <Feather name="trash" size={20} color='#EF5350' />
+                        <Text style={[styles.confirmItemText, {color: '#EF5350', paddingLeft: 20}]}>Excluir</Text>
+                    </TouchableOpacity>
+                }
             </View>
         </View>
     )

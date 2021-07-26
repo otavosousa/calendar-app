@@ -63,6 +63,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         display: 'flex',
         alignItems: 'center'
+    },
+    deleteBtn: {
+        marginTop: 100,
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 })
 
