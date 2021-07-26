@@ -8,7 +8,7 @@ function FactoryWeather(){
         const response = fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&cnt=7&appid=${WEATHER_API_KEY}`)
             .then(response => {
                 if(!response.ok) {
-                    throw new Error('No references')
+                    return {error: true}
                 }
                 return response.json()
             })
