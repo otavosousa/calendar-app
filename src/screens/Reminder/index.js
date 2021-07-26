@@ -155,7 +155,7 @@ function Reminder(){
                 <Text style={styles.confirmItemText}>Cancelar</Text>
               </TouchableOpacity>
               <View style={styles.titleContainer}>
-                  <Text style={styles.titleText}>{`Novo evento`}</Text>
+                  <Text style={styles.titleText}>{isEdit ? 'Editar evento' : `Novo evento`}</Text>
               </View>
               <TouchableOpacity style={styles.confirmItem} onPress={() => handleSave()}>
                 <Text style={styles.confirmItemText}>{isEdit ? 'Editar' : 'Salvar'}</Text>
