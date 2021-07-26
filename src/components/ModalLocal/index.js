@@ -1,15 +1,13 @@
 import React, {useState} from 'react'
 import {View, Modal, Text, TouchableWithoutFeedback, TouchableOpacity, TextInput} from 'react-native'
 import styles from './styles'
-import { useDispatch } from 'react-redux'
 import FactoryWeather from '../../factories/FactoryWeather'
+import FactoryReminder from '../../factories/FactoryReminder';
 
 export default function ModalLocal(props){
 
-    // HOOKS
-    const dispatch = useDispatch()
-
     // STATES
+    const factoryReminder = new FactoryReminder()
     const [local, setLocal] = useState('')
     const {modalLocalVisible, setModalLocalVisible} = props
     const factoryWeather = new FactoryWeather()
@@ -19,16 +17,22 @@ export default function ModalLocal(props){
     const handleGetWeather = async() => {
 
       const response = await factoryWeather.get(local)
+      if(response.error) {
+
+        return handleSetReminder({weather: 'Sem referência', local})
+      }
+
       const data = await response['weather'][0].main
       const weather = factoryWeather.translate(data)
-
       handleSetReminder({weather, local})
-
     }
 
     const handleSetReminder = (obj) => {
 
-        dispatch({type: 'EDIT_REMINDER', data: obj})
+        const data = obj
+
+        factoryReminder.actionCache(data)
+
         setModalLocalVisible(!modalLocalVisible)
     }
     

@@ -1,19 +1,17 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {View, Modal, Text, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import styles from './styles'
 import FactoryTime from '../../factories/FactoryTime';
-import { useDispatch } from 'react-redux'
+import FactoryReminder from '../../factories/FactoryReminder';
 
 export default function ModalTime(props){
 
-    // HOOKS
-    const dispatch = useDispatch()
-
     // STATES
+    const factoryReminder = new FactoryReminder()
     const factoryTime = new FactoryTime()
-    const [hours, setHours] = useState()
-    const [minutes, setMinutes] = useState()
+    const [hours, setHours] = useState('00')
+    const [minutes, setMinutes] = useState('00')
     const { 
         timeIsStart, 
         setModalTimeVisible, 
@@ -33,7 +31,7 @@ export default function ModalTime(props){
         if(timeIsStart) data = {start: `${hours}:${minutes}`}
         else data = {finish: `${hours}:${minutes}`}
 
-        dispatch({type: 'EDIT_REMINDER', data })
+        factoryReminder.actionCache(data)
         handleModalVisible()
     }
     

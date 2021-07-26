@@ -3,14 +3,12 @@ import {View, Modal, Text, TouchableWithoutFeedback, TouchableOpacity} from 'rea
 import {Picker} from '@react-native-picker/picker';
 import styles from './styles'
 import FactoryColor from '../../factories/FactoryColor';
-import { useDispatch } from 'react-redux'
+import FactoryReminder from '../../factories/FactoryReminder';
 
 export default function ModalColor(props){
 
-    // HOOKS
-    const dispatch = useDispatch()
-
     // STATES
+    const factoryReminder = new FactoryReminder()
     const factoryColor = new FactoryColor()
     const [color, setColor] = useState('')
     const {modalColorVisible, setModalColorVisible} = props
@@ -18,7 +16,9 @@ export default function ModalColor(props){
     // HANDLES
     const handleSetReminder = (obj) => {
 
-        dispatch({type: 'EDIT_REMINDER', data: obj})
+        const data = obj
+
+        factoryReminder.actionCache(data)
         setModalColorVisible(!modalColorVisible)
     }
     
