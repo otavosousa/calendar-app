@@ -29,8 +29,51 @@ const styles = StyleSheet.create({
     createItem: {
 
         position: 'absolute',
-        top: '95%',
-        left: '85%'
+        top: '100%',
+        left: '92%',
+    },
+    main: {
+
+        marginTop: 20,
+        height: 1440,
+        width: '100%',
+        flexDirection: 'row'
+        
+    },
+    createIcon: {
+        backgroundColor: 'white',
+        borderRadius: 100
+    },
+    nav: {
+        width: '20%',
+        height: 1440,
+    },
+    navItem: {
+        width: '100%',
+        height: 60,
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderColor: 'lightgray'
+    },
+    navItemText: {
+        fontSize: 18
+    },
+    body: {
+        width: '80%',
+        height: 1440,
+        position: 'relative'
+    },
+    bodyItem: {
+        width: '100%',
+        borderRadius: 10,
+        position: 'absolute',
+        paddingTop: 10,
+        paddingLeft: 10,
+    },
+    bodyItemText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: '500'
     }
 })
 
